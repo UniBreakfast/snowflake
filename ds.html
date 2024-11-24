@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Снежинка</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #1e1e2f; /* Тёмный фон */
+        }
+        canvas {
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+<canvas id="snowflakeCanvas" width="500" height="500"></canvas>
+<script>
+    const canvas = document.getElementById('snowflakeCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawSnowflake(x, y, size, branches, levels) {
+        ctx.save();
+        ctx.translate(x, y);
+
+        for (let i = 0; i < branches; i++) {
+            ctx.rotate((Math.PI * 2) / branches);
+            drawBranch(size, levels);
+        }
+
+        ctx.restore();
+    }
+
+    function drawBranch(length, depth) {
+        if (depth === 0) return;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -length);
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(0, -length * 0.7);
+        ctx.rotate(Math.PI / 6);
+        drawBranch(length * 0.6, depth - 1);
+        ctx.rotate(-Math.PI / 3);
+        drawBranch(length * 0.6, depth - 1);
+        ctx.restore();
+    }
+
+    // Настройки снежинки
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const size = 150; // Размер снежинки
+    const branches = 6; // Количество ветвей
+    const levels = 4; // Глубина рекурсии
+
+    // Фон канваса
+    ctx.fillStyle = '#1e1e2f';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Рисуем снежинку
+    drawSnowflake(centerX, centerY, size, branches, levels);
+</script>
+</body>
+</html>
